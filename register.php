@@ -139,7 +139,7 @@
                                     <input type="password" name="password_2" id="cpassword"><br>
                                 </fieldset>
 
-                                <div align="center" class="g-recaptcha" data-sitekey="6LdE3FoUAAAAAAsp2tVhL8WWf_ELiO4YHz5ZOzkN"></div>
+                                <div align="center" class="g-recaptcha" data-sitekey="<?php echo $recaptcha_public ?>"></div>
                                 <button  style="width: 100%" class="button button--primary" type="submit" name="reg_user">Register</button>
                             </form>
                             <div align="center">

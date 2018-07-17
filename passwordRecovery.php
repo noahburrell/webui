@@ -125,7 +125,7 @@ if(isset($_GET['email']) && isset($_GET['token'])){
                                             <label for="username">Email</label>
                                             <input type="text" name="user" id="username"><br>
                                         </fieldset>
-                                        <div align="center" class="g-recaptcha" data-sitekey="6LdE3FoUAAAAAAsp2tVhL8WWf_ELiO4YHz5ZOzkN"></div>
+                                        <div align="center" class="g-recaptcha" data-sitekey="'.$recaptcha_public.'"></div>
                                         <button style="width: 100%" class="button button--primary" type="submit" name="recovery">Send Recovery Email</button>
                                     </form>
                                     ';
