@@ -1,0 +1,268 @@
+/*  purple :  #893989;
+    green  :  #91C24C;
+*/
+/*-----------------------*/
+
+.staticNavBar{
+  background-color: #fff;
+  font-size: 0.75rem;
+  border-top: solid 2px #ccc;
+  text-align: center;
+  padding:1%;
+  padding-bottom:10px;
+}
+
+/*-----------------------*/
+
+.header{
+  background-color:#49166D;
+  color: #fff;
+  font-size: .9rem;
+  height: auto;
+  width: 100%;
+}
+
+.header td{
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.header h1{
+  color:#fff;
+  font-weight:400;
+  font-size:2rem;
+  letter-spacing: .2rem;
+  text-align:center;
+  margin-bottom: 0;
+}
+
+.loggedIn{
+  text-align: center;
+  font-size: 0.9rem;
+}
+.loggedIn img{
+  width:75px;
+  border-radius: 50%;
+}
+/*-----------------------*/
+
+
+.search{
+  background-color: #d8d8d8;
+  color: #54595f;
+}
+.search a{
+  color: #54595f;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: .1rem;
+}
+
+/*-----------------------*/
+
+
+.networkInfo{
+  text-align: center;
+  margin-top:5px;
+  border-bottom:solid 1px #91C24C;
+}
+.networkInfo p{
+  font-size: 0.9rem;
+}
+.networkInfo span{
+  border:2px solid  #91C24C;
+  border-radius: 50%;
+  color:  #91C24C;
+  font-weight: bold;
+}
+
+/*----------------------*/
+
+.networkList{
+  margin-top: 5px;
+  margin-bottom:100px;
+}
+.networkList div{
+  margin-top: 10px;
+  border-bottom:1px solid #ccc;
+}
+.networkList img{
+  width: 45px;
+  height:auto;
+  vertical-align:text-top;
+}
+.networkList p{
+  font-size:.8rem;
+  margin-left: 35%;
+}
+.networkList span{
+  font-size:0.9rem;
+  color: #91C24C;
+  font-weight:800;
+  margin-right: 5%;
+  border:2px solid  #91C24C;
+  border-radius: 50%;
+}
+.addNetwork{
+  text-align: center;
+  padding-bottom:8%;
+}
+
+
+
+/*-------------Device Info Page---------------*/
+
+.deviceInfo{
+  text-align: center;
+  max-height: 425px;
+}
+.deviceInfo p{
+  font-size: .9rem;
+}
+/*------------------------------*/
+
+
+.permissions{
+  background-color: #49166D;
+  text-align: center;
+  font-weight: 100;
+}
+.permissionList{
+  background-color: #fff;
+}
+/*--------------User Profile Page------------------*/
+
+
+.userInfo{
+  margin:auto;
+  max-height: 435px;
+  text-align:center;
+  color:#888;
+  margin-bottom:150px;
+}
+.userInfo p{
+  font-size: .9rem;
+}
+.userInfo span{
+  color: #91C24C;
+}
+
+.userPermissions{
+  background-color: #91C24C;
+}
+
+/*----------if I have time, style the alert and active icons-----------*/
+
+/*
+.switch{
+  background-image:url("../images/icons/switch.png");
+}
+.switchOff{
+  background-image:url("../images/icons/switchOff.png");
+}
+*/
+
+/*--------------Media Queries   FOR SCREENS LARGER THAN 699px -------------------*/
+@media screen and (min-width: 699px){
+
+
+.staticNavBar{
+  background-color: #fff;
+  font-size: 1rem;
+  border-top: solid 2px #ccc;
+  text-align: center;
+}
+.staticNavBar img{
+  width:65px;
+  height:auto;
+}
+
+.header h1{
+  font-size:3rem;
+}
+
+.loggedIn{
+  font-size: 1.5rem;
+}
+.loggedIn img{
+  max-width:85px;
+}
+
+.search{
+  background-color: #d8d8d8;
+  color: #54595f;
+}
+.search a{
+  color: #54595f;
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.networkInfo p{
+  font-size: 1.4rem;
+  margin-bottom:0px;
+}
+
+.networkList div{
+  border:1px solid #d8d8d8;
+  padding:1%;
+  margin: 20px;
+  margin-bottom:0px;
+  width: 375px;
+  height: 250px;
+}
+.networkList img{
+  width: 75px;
+  height:auto;
+  vertical-align:text-top;
+}
+.networkList p{
+  font-size:0.9rem;
+  margin-left: 45%;
+}
+.networkList p:nth-child(1n){
+  font-size:1.2rem;
+}
+.networkList p:nth-child(3n){
+  font-size:0.8rem;
+}
+.networkList span{
+  font-size:1rem;
+  color: #91C24C;
+  font-weight:800;
+  margin-left: 5%;
+  border:2px solid  #91C24C;
+  border-radius: 50%;
+}
+
+.addNetwork{
+  text-align: center;
+  border:1px dashed #d8d8d8;
+}
+.addNetwork img{
+  margin-top:50px;
+}
+
+.deviceInfo{
+  max-height: 525px;
+}
+.deviceInfo p{
+  font-size: 1rem;
+}
+
+.permissions a{
+  font-size:1.2rem;
+}
+
+
+.userInfo{
+  max-height: 525px;
+}
+.userInfo p{
+  font-size: 1rem;
+}
+
+.userPermissions a {
+    font-size: 1.2rem;
+}
+

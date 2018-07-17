@@ -1,0 +1,33 @@
+<?php include('server.php') ?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/login.css">
+		<title>TELUS: Private Networks - Work Computer</title>
+		<script>
+			function nextPage(var1) {
+				window.location.href='userProfile.html';
+			}
+		</script>
+	</head>
+	<body>
+		
+		<div class="container">
+			<img src="images/icons/telusLogo.png" alt="Telus" />
+        </div> 
+		<div class="form">
+		<form method="post" action="login.php">
+			<?php include('errors.php'); ?>
+			Login Name:<br>
+			<input type="text" name="user"><br>
+			Password:<br>
+			<input type="text" name="pass"><br>
+		</form>
+		</div>
+		<div class="submit">
+			<button class="submitButton" type="submit" name="login_user">Submit</button>
+			<button id="reclass="registerButton" type="button" onclick="loginPage()" >Register for an account</button>
+</div>
+	</body>
+</html>
