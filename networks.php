@@ -9,7 +9,7 @@ loginCheck($mysql, true);
 timeoutCheck();
 refreshSessionInfo($mysql); //Might only be necessary after user has modified their profile -- Increases MySQL server load
 
-///print_r($_SESSION);
+print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>

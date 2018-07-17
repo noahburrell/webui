@@ -35,7 +35,6 @@ function loginCheck($mysql, $autoRedirect = false, $redirect = 'login.php'){
 
             $conn = new mysqli($mysql["host"], $mysql["user"], $mysql['password'], $mysql['db'], $mysql['port']);
             $query = "SELECT * FROM $table WHERE selector='$selector';";
-
             $result = $conn->query($query);
             if ($result->num_rows == 1) {
                 $result = $result->fetch_assoc();

@@ -1,18 +1,18 @@
 <?php
 $mysql = array(
-    "host" => "127.0.0.1",
+    "host" => "localhost",
     "port" => "3306",
     "user" => "root",
-    "password" => "",
-    "db" => "",
+    "password" => "password",
+    "db" => "telus",
     "loginTable" => "loginInfo",
     "recoveryTable" => "passwordRecovery",
     "persistentLogin" => "auth_tokens"
 );
 
-$recaptcha_key = "";
+$recaptcha_key = "6LdE3FoUAAAAAAZ1x-soMD6IdqUPOjlf5X-0xk4Z";
 
 $mailjet = array(
-    "public" => "",
-    "private" => ""
+    "public" => "cc0e7c70bfc40c30d4fd3e16d4441d42",
+    "private" => "76b2263a5a6d72fb3b395406f8769280"
 );
