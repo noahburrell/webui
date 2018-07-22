@@ -6,7 +6,7 @@ $mysql = array(
     "password" => "password",
     "db" => "",
     "loginTable" => "loginInfo",
-    "recoveryTable" => "passwordRecovery",
+    "recoveryTable" => "passwordrecovery",
     "persistentLogin" => "auth_tokens"
 );
 
