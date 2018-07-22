@@ -233,4 +233,10 @@ class userAccount {
             return false;
         }
     }
+
+    function getNetworks($uid){
+        $query = "SELECT * FROM routerTable INNER JOIN subnetTable ON routerTable.id = subnetTable.rid WHERE routerTable.uid = '".$uid."';";
+        $result = $this->conn->query($query);
+        return $result->fetch_all();
+    }
 }
