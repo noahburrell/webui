@@ -37,7 +37,7 @@
           <div class="xs-12 deviceInfo">
 
             <div class="grid-row">
-              <img class="my-3" src="images/icons/PC.png" alt="Work Computer"/>
+              <img class="my-3" src="images/icons/network/2.png" alt="Work Computer"/>
               <h2>Work Computer</h2>
               <div class="xs-10 offset-xs-1">
                 <p>MAC Address: 00-14-22-01-23-45  </p>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 session_regenerate_id();
+date_default_timezone_set('EST');
 
 //Check if the user has timed out. Default timeout is 900s.
 function timeoutCheck($timeout = 900, $update = true){
