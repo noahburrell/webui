@@ -239,4 +239,11 @@ class userAccount {
         $result = $this->conn->query($query);
         return $result->fetch_all();
     }
+
+    function createNetwork($uid, $name){
+        $name = mysqli_real_escape_string($this->conn, $name);
+        $command = "sudo python /opt/osapi/main.py ".$uid." -n \"".$name."\" &";
+        exec($command, $output, $status);
+        print_r($output);
+    }
 }

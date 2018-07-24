@@ -9,7 +9,17 @@ $pageTitle="Networks";
 loginCheck($mysql, true);
 timeoutCheck();
 refreshSessionInfo($mysql); //Might only be necessary after user has modified their profile -- Increases MySQL server load
-//print_r($_SESSION);
+#print_r($_SESSION);
+
+$acc = new userAccount($mysql);
+//Fetch list of networks the user owns and print out each network
+$netlist = $acc->getNetworks($_SESSION['id']);
+//Create a new network
+if(isset($_POST['netname'])){
+    $acc->createNetwork($_SESSION['id'], $_POST['netname']);
+    unset($_POST['netname']);
+    header("Location:networks.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,30 +43,12 @@ refreshSessionInfo($mysql); //Might only be necessary after user has modified th
 
         <!-- NETWORK INFO -->
         <div class="grid-row networkInfo">
-            <p class="xs-10 offset-xs-1">You are connected to <span>&nbsp;4&nbsp;</span> networks</p>
+            <p class="xs-10 offset-xs-1">You are connected to <span>&nbsp;<?php echo count($netlist) ?>&nbsp;</span> <?php
+            if(count($netlist) == 1){ echo 'network';}else{echo 'networks';} ?></p>
         </div>
 
         <!--NETWORK LIST-->
         <div class="grid-row networkList">
-            <?php
-            //Fetch list of networks the user owns and print out each network
-            $acc = new userAccount($mysql);
-            $netlist = $acc->getNetworks($_SESSION['id']);
-            //print_r($netlist);
-            foreach($netlist as $network){
-              echo '
-              <div class="xs-12  col-md-3">
-              <i class="icon icon-core-hamburger icon--fw"></i>
-              <img class="mx-3"src="images/icons/network/'.$network[11].'.png" alt="' .$network[6].'"/>
-                  '.$network[6].'<br />
-              <p><span> &nbsp;5&nbsp; </span> Devices</p>
-              <p><span> &nbsp;1&nbsp; </span> Users</p>
-              <p>Online since: '.date("F jS, Y", strtotime($network[10])).'</p>
-            </div>
-              ';
-            }
-            unset($network)
-            ?>
             <!--
             <div class="xs-12 col-md-3">
               <i class="icon icon-core-hamburger icon--fw"></i>
@@ -94,7 +86,7 @@ refreshSessionInfo($mysql); //Might only be necessary after user has modified th
               <p>Online since September 1, 2017</p>
             </div>
             -->
-            <form action="addnetwork.php">
+            <form action="networks.php" method="post">
                 <div class="xs-12  col-md-3 addNetwork">
                     <fieldset class="field" style="text-align: left;">
                         <label for="netname">Network Name</label>
@@ -103,6 +95,23 @@ refreshSessionInfo($mysql); //Might only be necessary after user has modified th
                     <button style="width: 100%" class="button button--primary" type="submit" name="login_user">Create Network</button>
                 </div>
             </form>
+            <?php
+            //print_r($netlist);
+            foreach($netlist as $network){
+                echo '
+                <a href="#">
+                    <div class="xs-12  col-md-3">
+                        <i class="icon icon-core-hamburger icon--fw"></i>
+                        <img class="mx-3"src="images/icons/network/'.$network[11].'.png" alt="' .$network[6].'"/>
+                          '.$network[6].'<br />
+                        <p><span> &nbsp;5&nbsp; </span> Devices</p>
+                        <p>Online since: '.date("F jS, Y", strtotime($network[10])).'</p>
+                    </div>
+                </a>
+              ';
+            }
+            unset($network)
+            ?>
         </div>
 
         <!--STATIC NAV-->
