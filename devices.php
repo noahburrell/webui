@@ -1,13 +1,49 @@
 <?php
 include_once('conn.php');
 include_once('libs/common.php');
+include_once ('libs/userAccount.php');
 
 $pageTitle="Devices";
+$success = null;
+$error = null;
 
 //Check login status, auto redirect to login if not logged in, and update session information.
 loginCheck($mysql,true);
 timeoutCheck();
 refreshSessionInfo($mysql); //Might only be necessary after user has modified their profile -- Increases MySQL server load
+
+#Make sure a network to lookup devices in is defined
+if(!isset($_GET['network'])){
+    header('Location: networks.php');
+    die();
+}
+
+$acc = new userAccount($mysql);
+
+#Verify the specified network is owned by the currently signed in user
+if(!$acc->verifyNetworkOwnership($_GET['network'], $_SESSION['id']))
+    die();
+
+#Check if new device is to be created
+if(isset($_POST['devname']) && !empty($_POST['devname'])){
+    //Create a new device
+    if($acc->addDevice($_GET['network'], $_POST['devname'])){
+        $success = "A new device was successfully added!";
+    } else {
+        $error = "An unknown error occured when adding the device!";
+    }
+}
+
+#Check if a device is to be deleted
+if(isset($_POST['deleteDevice']) && !empty($_POST['deleteDevice'])){
+    //delete device
+    if($acc->deleteDevice($_GET['network'], $_POST['deleteDevice'])){
+        $success = "Device was successfully removed!";
+    } else {
+        $error = "Device could not be deleted!";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -39,19 +75,48 @@ refreshSessionInfo($mysql); //Might only be necessary after user has modified th
 
     <!-- NETWORK INFO -->
     <div class="grid-row networkInfo">
-        <p class="xs-10 offset-xs-1">You have <span>&nbsp;0&nbsp;</span> devices connected</p>
+        <p class="xs-10 offset-xs-1">You have <span class="alttext">&nbsp;<?php print $acc->getDeviceCount($_GET['network']); ?>&nbsp;</span> devices connected to <?php print $acc->getNetName($_GET['network']); ?>.</p>
+    </div>
+
+    <div class="grid-row" align="center">
+    <?php throwSuccess($success); ?>
+    <?php throwError($error); ?>
     </div>
 
     <!--NETWORK LIST-->
-    <div class="grid-row networkList">
+    <div class="grid-row deviceList">
+        <form action="devices.php?network=<?php echo $_GET['network']; ?>" method="post">
+            <div class="xs-12  col-md-4">
+                <fieldset class="field" style="text-align: left;">
+                    <label for="devname">Device Name</label>
+                    <input id="devname" name="devname" type="text" required>
+                </fieldset>
+                <button style="width: 100%" class="button button--primary" type="submit">Add Device</button>
+            </div>
+        </form>
 
-
-
-        <div class="xs-12  col-md-3 addNetwork">
-            <button type="submit" id="toLogin" name="toLogin" onclick="window.location.href='newNetwork.php';"><img src="images/icons/add.png" alt="Add a Device"</button>
-
-            Add a Device
-        </div>
+        <?php
+        $devlist = $acc->getDevices($_GET['network']);
+        foreach($devlist as $device){
+            #Display network
+            echo '
+                    <div class="xs-12  col-md-4">
+                        <form action="devices.php?network='.$_GET['network'].'" method="post">
+                            <i class="icon icon-core-hamburger icon--fw"></i>
+                            <img class="mx-3"src="images/icons/network/2.png" alt="' .$device[3].'"/>
+                            '.$device[3].'<br />
+                            <p style="margin-left: 0;">
+                            MAC:&nbsp;<span class="alttext">'.$device[2].'</span><br />                
+                            Password:&nbsp;<span id="password_'.$device[0].'" class="alttext" id="password">'.$device[5].'</span> 
+                            </p>
+                        
+                            <button style="margin: 2px; width: 100%;" class="button button--primary" type="submit" name="changeDevice" value="'.$device[0].'">Change Device</button>
+                            <button style="margin: 2px; width: 100%;" class="button button--secondary" type="submit" name="deleteDevice" value="'.$device[0].'">Delete Device</button>
+                        </form>
+                    </div>
+              ';
+        }
+        ?>
 
     </div>
 

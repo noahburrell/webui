@@ -4,6 +4,11 @@ class userAccount {
     private $table;
     private $recovery;
     private $persistent;
+    private $devices;
+    private $gateways;
+    private $subnets;
+    private $ports;
+    private $routers;
     private $pepper = "telus";
 
     function __construct($mysql) {
@@ -11,6 +16,12 @@ class userAccount {
         $this->table = mysqli_real_escape_string($this->conn, $mysql['loginTable']);
         $this->recovery = mysqli_real_escape_string($this->conn, $mysql['recoveryTable']);
         $this->persistent = mysqli_real_escape_string($this->conn, $mysql['persistentLogin']);
+
+        $this->gateways = mysqli_real_escape_string($this->conn, $mysql['gatewayTable']);
+        $this->ports = mysqli_real_escape_string($this->conn, $mysql['portTable']);
+        $this->routers = mysqli_real_escape_string($this->conn, $mysql['routerTable']);
+        $this->devices = mysqli_real_escape_string($this->conn, $mysql['deviceTable']);
+        $this->subnets = mysqli_real_escape_string($this->conn, $mysql['subnetTable']);
     }
 
     function __destruct() {
@@ -245,5 +256,65 @@ class userAccount {
         $command = "sudo python /opt/osapi/main.py ".$uid." -n \"".$name."\" &";
         exec($command, $output, $status);
         print_r($output);
+    }
+
+    function verifyNetworkOwnership($network, $uid){
+        $network = mysqli_real_escape_string($this->conn, $network);
+
+        $query = "SELECT * FROM $this->subnets INNER JOIN $this->routers ON $this->subnets.rid = $this->routers.id WHERE $this->routers.uid = $uid AND $this->subnets.id = $network";
+        $result = $this->conn->query($query)->num_rows;
+        if($result != 1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function getNetName($network){
+        $network = mysqli_real_escape_string($this->conn, $network);
+        $query = "SELECT subname FROM $this->subnets WHERE id = $network LIMIT 1";
+        return $this->conn->query($query)->fetch_all()[0][0];
+    }
+
+    function getDeviceCount($snetid){
+        $snetid = mysqli_real_escape_string($this->conn, $snetid);
+        $query = "SELECT COUNT(*) AS deviceCount FROM $this->devices INNER JOIN $this->subnets ON $this->devices.sid = $this->subnets.id WHERE $this->subnets.id = $snetid;";
+        $result = $this->conn->query($query)->fetch_all();
+        return $result[0][0];
+    }
+
+    function getDevices($snetid){
+        $snetid = mysqli_real_escape_string($this->conn, $snetid);
+        $query = "SELECT $this->devices.* FROM $this->devices INNER JOIN $this->subnets ON $this->devices.sid = $this->subnets.id WHERE $this->subnets.id=$snetid;";
+        $results = $this->conn->query($query)->fetch_all();
+        return $results;
+    }
+
+    function addDevice($sid, $name){
+        $sid = mysqli_real_escape_string($this->conn, $sid);
+        $name = mysqli_real_escape_string($this->conn, $name);
+        //Create token
+        $token = base64_encode(random_bytes(6));
+        //Insert into DB
+        $query = "INSERT INTO $this->devices (sid,name,token) VALUES ('$sid', '$name', '$token')";
+        $result = $this->conn->query($query);
+        if($result === TRUE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function deleteDevice($sid, $id){
+        $sid = mysqli_real_escape_string($this->conn, $sid);
+        $id = mysqli_real_escape_string($this->conn, $id);
+
+        $query = "DELETE FROM $this->devices WHERE id=$id AND sid=$sid";
+        $result = $this->conn->query($query);
+        if($result === TRUE){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -43,7 +43,7 @@ if(isset($_POST['netname'])){
 
         <!-- NETWORK INFO -->
         <div class="grid-row networkInfo">
-            <p class="xs-10 offset-xs-1">You are connected to <span>&nbsp;<?php echo count($netlist) ?>&nbsp;</span> <?php
+            <p class="xs-10 offset-xs-1">You are connected to <span class="alttext">&nbsp;<?php echo count($netlist) ?>&nbsp;</span> <?php
             if(count($netlist) == 1){ echo 'network';}else{echo 'networks';} ?></p>
         </div>
 
@@ -92,20 +92,23 @@ if(isset($_POST['netname'])){
                         <label for="netname">Network Name</label>
                         <input id="netname" name="netname" type="text" required>
                     </fieldset>
-                    <button style="width: 100%" class="button button--primary" type="submit" name="login_user">Create Network</button>
+                    <button style="width: 100%" class="button button--primary" type="submit">Create Network</button>
                 </div>
             </form>
             <?php
             //print_r($netlist);
             foreach($netlist as $network){
+                #Get number of devices for this network
+                $deviceCount = $acc->getDeviceCount($network[4]);
+                #Display network
                 echo '
-                <a href="#">
+                <a href="devices.php?network='.$network[4].'">
                     <div class="xs-12  col-md-3">
                         <i class="icon icon-core-hamburger icon--fw"></i>
                         <img class="mx-3"src="images/icons/network/'.$network[11].'.png" alt="' .$network[6].'"/>
                           '.$network[6].'<br />
-                        <p><span> &nbsp;5&nbsp; </span> Devices</p>
-                        <p>Online since: '.date("F jS, Y", strtotime($network[10])).'</p>
+                        <p style="margin-left: 0">Devices: <span class="alttext">&nbsp;'.$deviceCount.'&nbsp; </span><br />
+                        Online since: <span class="alttext">'.date("F jS, Y", strtotime($network[10])).'</span></p>
                     </div>
                 </a>
               ';
