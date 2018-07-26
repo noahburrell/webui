@@ -4,6 +4,8 @@ include_once('libs/common.php');
 include_once('libs/userAccount.php');
 
 $pageTitle="Networks";
+$success = null;
+$error = null;
 
 //Check login status, auto redirect to login if not logged in, and update session information.
 loginCheck($mysql, true);
@@ -12,14 +14,26 @@ refreshSessionInfo($mysql); //Might only be necessary after user has modified th
 #print_r($_SESSION);
 
 $acc = new userAccount($mysql);
+
+//Create a new network
+if(isset($_POST['netname']) && !empty($_POST['netname'])){
+    if($acc->createNetwork($_SESSION['id'], $_POST['netname'])){
+        $success = "A new network was successfully created!";
+    } else {
+        $error = "An unknown error occured when creating a new network!";
+    }
+}
+
+if(isset($_POST['deleteNetwork']) && !empty($_POST['deleteNetwork'])){
+    if($acc->deleteNetwork($_SESSION['id'], $_POST['deleteNetwork'])){
+        $success = "The network was successfully deleted!";
+    } else {
+        $error = "An unknown error occured when deleting the network";
+    }
+}
+
 //Fetch list of networks the user owns and print out each network
 $netlist = $acc->getNetworks($_SESSION['id']);
-//Create a new network
-if(isset($_POST['netname'])){
-    $acc->createNetwork($_SESSION['id'], $_POST['netname']);
-    unset($_POST['netname']);
-    header("Location:networks.php");
-}
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +59,11 @@ if(isset($_POST['netname'])){
         <div class="grid-row networkInfo">
             <p class="xs-10 offset-xs-1">You are connected to <span class="alttext">&nbsp;<?php echo count($netlist) ?>&nbsp;</span> <?php
             if(count($netlist) == 1){ echo 'network';}else{echo 'networks';} ?></p>
+        </div>
+
+        <div class="grid-row" align="center">
+            <?php throwSuccess($success); ?>
+            <?php throwError($error); ?>
         </div>
 
         <!--NETWORK LIST-->
@@ -87,7 +106,7 @@ if(isset($_POST['netname'])){
             </div>
             -->
             <form action="networks.php" method="post">
-                <div class="xs-12  col-md-3 addNetwork">
+                <div class="xs-12  col-md-4 addNetwork">
                     <fieldset class="field" style="text-align: left;">
                         <label for="netname">Network Name</label>
                         <input id="netname" name="netname" type="text" required>
@@ -103,12 +122,16 @@ if(isset($_POST['netname'])){
                 #Display network
                 echo '
                 <a href="devices.php?network='.$network[4].'">
-                    <div class="xs-12  col-md-3">
-                        <i class="icon icon-core-hamburger icon--fw"></i>
-                        <img class="mx-3"src="images/icons/network/'.$network[11].'.png" alt="' .$network[6].'"/>
-                          '.$network[6].'<br />
-                        <p style="margin-left: 0">Devices: <span class="alttext">&nbsp;'.$deviceCount.'&nbsp; </span><br />
-                        Online since: <span class="alttext">'.date("F jS, Y", strtotime($network[10])).'</span></p>
+                    <div class="xs-12  col-md-4">
+                        <form action="networks.php" method="post">
+                            <i class="icon icon-core-hamburger icon--fw"></i>
+                            <img class="mx-3"src="images/icons/network/'.$network[11].'.png" alt="' .$network[6].'"/>
+                            '.$network[6].'<br />
+                            <p style="margin-left: 0">Devices: <span class="alttext">&nbsp;'.$deviceCount.'&nbsp; </span><br />
+                            Online since: <span class="alttext">'.date("F jS, Y", strtotime($network[10])).'</span></p>
+                            <button style="margin: 2px; width: 100%;" class="button button--primary" type="submit" name="changeNetwork" value="'.$network[4].'">Change Network</button>
+                            <button style="margin: 2px; width: 100%;" class="button button--secondary" type="submit" name="deleteNetwork" value="'.$network[4].'">Delete Network</button>
+                        </form>
                     </div>
                 </a>
               ';
