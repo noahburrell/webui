@@ -253,9 +253,24 @@ class userAccount {
 
     function createNetwork($uid, $name){
         $name = mysqli_real_escape_string($this->conn, $name);
-        $command = "sudo python /opt/osapi/main.py ".$uid." -n \"".$name."\" &";
+        $command = "sudo python /opt/osapi/main.py $uid -n \"$name\" &";
         exec($command, $output, $status);
-        print_r($output);
+        if($status == 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function deleteNetwork($uid, $id){
+        $id = mysqli_real_escape_string($this->conn, $id);
+        $command = "sudo python /opt/osapi/main.py $uid -d $id &";
+        exec($command, $output, $status);
+        if($status == 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function verifyNetworkOwnership($network, $uid){
