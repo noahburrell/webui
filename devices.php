@@ -12,7 +12,7 @@ loginCheck($mysql,true);
 timeoutCheck();
 refreshSessionInfo($mysql); //Might only be necessary after user has modified their profile -- Increases MySQL server load
 
-#Make sure a network to lookup devices in is defined
+//Make sure a network to lookup devices in is defined
 if(!isset($_GET['network'])){
     header('Location: networks.php');
     die();
@@ -20,11 +20,11 @@ if(!isset($_GET['network'])){
 
 $acc = new userAccount($mysql);
 
-#Verify the specified network is owned by the currently signed in user
+//Verify the specified network is owned by the currently signed in user
 if(!$acc->verifyNetworkOwnership($_GET['network'], $_SESSION['id']))
     die();
 
-#Check if new device is to be created
+//Check if new device is to be created
 if(isset($_POST['devname']) && !empty($_POST['devname'])){
     //Create a new device
     if($acc->addDevice($_GET['network'], $_POST['devname'])){
@@ -34,7 +34,7 @@ if(isset($_POST['devname']) && !empty($_POST['devname'])){
     }
 }
 
-#Check if a device is to be deleted
+//Check if a device is to be deleted
 if(isset($_POST['deleteDevice']) && !empty($_POST['deleteDevice'])){
     //delete device
     if($acc->deleteDevice($_GET['network'], $_POST['deleteDevice'])){
