@@ -105,7 +105,7 @@ $netlist = $acc->getNetworks($_SESSION['id']);
               <p>Online since September 1, 2017</p>
             </div>
             -->
-            <form action="networks.php" method="post">
+            <form id="recaptcha-form" action="networks.php" method="post">
                 <div class="xs-12  col-md-4 addNetwork">
                     <fieldset class="field" style="text-align: left;">
                         <label for="netname">Network Name</label>
@@ -129,7 +129,7 @@ $netlist = $acc->getNetworks($_SESSION['id']);
                             '.$network[6].'<br />
                             <p style="margin-left: 0">Devices: <span class="alttext">&nbsp;'.$deviceCount.'&nbsp; </span><br />
                             Online since: <span class="alttext">'.date("F jS, Y", strtotime($network[10])).'</span></p>
-                            <button style="margin: 2px; width: 100%;" class="button button--primary" type="submit" name="changeNetwork" value="'.$network[4].'">Change Network</button>
+                            <button style="margin: 2px; width: 100%;" class="button button--primary" type="button" name="changeNetwork">Change Network</button>
                             <button style="margin: 2px; width: 100%;" class="button button--secondary" type="submit" name="deleteNetwork" value="'.$network[4].'">Delete Network</button>
                         </form>
                     </div>
@@ -144,6 +144,7 @@ $netlist = $acc->getNetworks($_SESSION['id']);
         <?php require('libs/navbar.php'); ?>
 
         </div>
+
         <!--JS FILES-->
         <?php require('libs/jsscripts.php'); ?>
 

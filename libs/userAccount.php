@@ -305,13 +305,21 @@ class userAccount {
         return $results;
     }
 
-    function addDevice($sid, $name){
+    function addDevice($sid, $name, $pass = null){
         $sid = mysqli_real_escape_string($this->conn, $sid);
         $name = mysqli_real_escape_string($this->conn, $name);
-        //Create token
-        $token = base64_encode(random_bytes(6));
+        $uid = $_SESSION['id'];
+
         //Insert into DB
-        $query = "INSERT INTO $this->devices (sid,name,token) VALUES ('$sid', '$name', '$token')";
+        if($pass != null){
+            //Make sure user password uses printable chars only and then escape the string
+            $pass = preg_replace('/[[:^print:]]/', '', $pass);
+            $pass = mysqli_real_escape_string($this->conn, $pass);
+        } else {
+            //Auto generate a password is one was not provided
+            $pass = base64_encode(random_bytes(6));
+        }
+        $query = "INSERT INTO $this->devices (uid,sid,name,token) VALUES ('$uid', '$sid', '$name', '$pass')";
         $result = $this->conn->query($query);
         if($result === TRUE){
             return true;

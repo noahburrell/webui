@@ -26,11 +26,15 @@ if(!$acc->verifyNetworkOwnership($_GET['network'], $_SESSION['id']))
 
 //Check if new device is to be created
 if(isset($_POST['devname']) && !empty($_POST['devname'])){
+    $password = null;
+    if(isset($_POST['devpass']) && strlen($_POST['devpass']) >= 8 && strlen($_POST['devpass']) < 64){
+        $password = $_POST['devpass'];
+    }
     //Create a new device
-    if($acc->addDevice($_GET['network'], $_POST['devname'])){
+    if($acc->addDevice($_GET['network'], $_POST['devname'], $_POST['devpass'])){
         $success = "A new device was successfully added!";
     } else {
-        $error = "An unknown error occured when adding the device!";
+        $error = "An unknown error occured when adding the device! Ensure the device does not use a shared password!";
     }
 }
 
@@ -90,24 +94,27 @@ if(isset($_POST['deleteDevice']) && !empty($_POST['deleteDevice'])){
                 <fieldset class="field" style="text-align: left;">
                     <label for="devname">Device Name</label>
                     <input id="devname" name="devname" type="text" required>
+                    <label for="devpass">Device Password</label>
+                    <input id="devpass" name="devpass" type="text" minlength="8" placeholder="(Optional)">
                 </fieldset>
-                <button style="width: 100%" class="button button--primary" type="submit">Add Device</button>
+                <button style="width: 100%; margin-top: 0;" class="button button--primary" type="submit">Add Device</button>
             </div>
         </form>
 
         <?php
         $devlist = $acc->getDevices($_GET['network']);
+        //print_r($devlist);
         foreach($devlist as $device){
             #Display network
             echo '
                     <div class="xs-12  col-md-4">
                         <form action="devices.php?network='.$_GET['network'].'" method="post">
                             <i class="icon icon-core-hamburger icon--fw"></i>
-                            <img class="mx-3"src="images/icons/network/2.png" alt="' .$device[3].'"/>
-                            '.$device[3].'<br />
+                            <img class="mx-3"src="images/icons/network/2.png" alt="' .$device[4].'"/>
+                            '.$device[4].'<br />
                             <p style="margin-left: 0;">
-                            MAC:&nbsp;<span class="alttext">'.$device[2].'</span><br />                
-                            Password:&nbsp;<span id="password_'.$device[0].'" class="alttext" id="password">'.$device[5].'</span> 
+                            MAC:&nbsp;<span class="alttext">'.$device[3].'</span><br />                
+                            Password:&nbsp;<span id="password_'.$device[1].'" class="alttext" id="password">'.$device[6].'</span> 
                             </p>
                         
                             <button style="margin: 2px; width: 100%;" class="button button--primary" type="submit" name="changeDevice" value="'.$device[0].'">Change Device</button>
