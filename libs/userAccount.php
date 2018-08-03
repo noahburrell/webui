@@ -322,6 +322,7 @@ class userAccount {
         $query = "INSERT INTO $this->devices (uid,sid,name,token) VALUES ('$uid', '$sid', '$name', '$pass')";
         $result = $this->conn->query($query);
         if($result === TRUE){
+            $this->updateGateway();
             return true;
         } else {
             return false;
@@ -335,6 +336,18 @@ class userAccount {
         $query = "DELETE FROM $this->devices WHERE id=$id AND sid=$sid";
         $result = $this->conn->query($query);
         if($result === TRUE){
+            $this->updateGateway();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function updateGateway(){
+        $uid = $_SESSION['id'];
+        $command = "sudo /opt/wpapsk_gen/main.py $uid";
+        $message = exec($command, $output, $status);
+        if($status == 0){
             return true;
         } else {
             return false;
