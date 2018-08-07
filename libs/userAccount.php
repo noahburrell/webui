@@ -252,9 +252,16 @@ class userAccount {
     }
 
     function createNetwork($uid, $name){
+        //Create openstack network
         $name = mysqli_real_escape_string($this->conn, $name);
         $command = "sudo python /opt/osapi/main.py $uid -n \"$name\" &";
         exec($command, $output, $status);
+
+        //Update router WPA_PSK and wireless file
+        $command = "sudo /opt/wpapsk_gen/main.py $uid -c";
+        $message = exec($command, $output, $status);
+
+        //Return status
         if($status == 0){
             return true;
         } else {
@@ -263,9 +270,16 @@ class userAccount {
     }
 
     function deleteNetwork($uid, $id){
+        //Delete openstack network
         $id = mysqli_real_escape_string($this->conn, $id);
         $command = "sudo python /opt/osapi/main.py $uid -d $id &";
         exec($command, $output, $status);
+
+        //Update router WPA_PSK and wireless file
+        $command = "sudo /opt/wpapsk_gen/main.py $uid -c";
+        $message = exec($command, $output, $status);
+
+        //Return status
         if($status == 0){
             return true;
         } else {
