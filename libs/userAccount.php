@@ -327,11 +327,20 @@ class userAccount {
         //Insert into DB
         if($pass != null){
             //Make sure user password uses printable chars only and then escape the string
-            $pass = preg_replace('/[[:^print:]]/', '', $pass);
+            $pass = preg_replace('/[^\da-z]/i', '', $pass);
             $pass = mysqli_real_escape_string($this->conn, $pass);
         } else {
             //Auto generate a password is one was not provided
-            $pass = base64_encode(random_bytes(6));
+            $pass = "";
+            $index = 0;
+            while($index < 8){
+                $temp_char = base64_encode(random_bytes(1));
+                if($temp_char[0] != "+" && $temp_char[0] != "/"){
+                    $pass = $pass.$temp_char[0];
+                    $index++;
+                }
+            }
+            unset($index);
         }
         $query = "INSERT INTO $this->devices (uid,sid,name,token) VALUES ('$uid', '$sid', '$name', '$pass')";
         $result = $this->conn->query($query);
